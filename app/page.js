@@ -237,16 +237,101 @@ const itineraryData = [
     weather: "晴朗",
     temp: "10°C - 17°C",
     activities: [
-      { time: "08:00", title: "Check-out & 移動", type: "transport", icon: "taxi", note: "搭計程車至 JR 門樓酒店寄放行李", location: "Nagoya JR Gate Tower Hotel", transport: "計程車", description: "轉換住宿地點至名古屋車站上方，方便明日搭機。", 
+      { 
+        time: "08:00", 
+        title: "Check-out & 搭計程車", 
+        type: "transport", 
+        icon: "taxi", 
+        note: "【務必準時】 提前出發到新飯店。", 
+        location: "The Royal Park Hotel Iconic Nagoya", 
+        transport: "計程車",
+        description: "搭乘計程車前往名古屋車站，請預留交通時間。",
         image: "/d5-taxi.jpg" 
       },
-      { time: "10:30", title: "抵達鈴鹿賽道樂園", type: "activity", icon: "flag", note: "開園初期抵達，幼兒友善設施", location: "Suzuka Circuit Park", transport: "巴士 + 步行", description: "以賽車為主題的樂園，許多設施都可讓小朋友親自駕駛。", 
+      { 
+        time: "08:30", 
+        title: "抵達JR門樓酒店，寄放行李", 
+        type: "hotel", 
+        icon: "hotel", 
+        note: "-", 
+        location: "Nagoya JR Gate Tower Hotel", 
+        transport: "步行",
+        description: "抵達當晚住宿飯店寄放行李，位置就在車站上方，非常便利。",
+        image: "/d1-hotel.jpg" // Reuse Day 1 hotel image
+      },
+      { 
+        time: "09:10", 
+        title: "搭乘近鐵特急", 
+        type: "transport", 
+        icon: "train", 
+        note: "09:10 發車 (已購票)。週末早班車，確保有位。", 
+        location: "Kintetsu Nagoya Station", 
+        transport: "近鐵特急",
+        description: "搭乘舒適的近鐵特急前往白子站，展開鈴鹿之旅。",
+        image: "/d2-station.jpg" // Reuse station image
+      },
+      { 
+        time: "10:30", 
+        title: "抵達鈴鹿賽道樂園", 
+        type: "activity", 
+        icon: "flag", 
+        note: "開園初期抵達，可先玩其他設施。", 
+        location: "Suzuka Circuit Park", 
+        transport: "巴士 + 步行",
+        description: "以賽車為主題的樂園，許多設施都可讓小朋友親自駕駛。",
         image: "/d5-suzuka.jpg" 
       },
-      { time: "12:30", title: "賽道挑戰者", type: "activity", icon: "car", note: "預約時段，請準時", location: "Suzuka Circuit Circuit Challenger", description: "在真實的F1賽道上駕駛電動賽車！", 
+      { 
+        time: "12:30", 
+        title: "賽道挑戰者", 
+        type: "activity", 
+        icon: "car", 
+        note: "預約時段，請準時報到。", 
+        location: "Suzuka Circuit Circuit Challenger", 
+        description: "在真實的F1賽道上駕駛電動賽車！",
         image: "/d5-race.jpg" 
       },
-      { time: "18:40", title: "晚餐與最後採購", type: "shopping", icon: "shop", note: "車站周邊 (高島屋/Bic Camera)", location: "Nagoya Station", description: "名古屋車站周邊百貨林立，最後採購的好地方。", 
+      { 
+        time: "14:00", 
+        title: "Acro-X 快速通關", 
+        type: "activity", 
+        icon: "car", 
+        note: "-", 
+        location: "Suzuka Circuit Acro-X", 
+        description: "體驗 Acro-X 越野駕駛樂趣。",
+        image: "/d5-suzuka.jpg" // Reuse suzuka image
+      },
+      { 
+        time: "16:30", 
+        title: "離開樂園，前往白子站", 
+        type: "transport", 
+        icon: "bus", 
+        note: "預留充足時間等巴士。", 
+        location: "Suzuka Circuit Ino Station Bus Stop", 
+        transport: "巴士",
+        description: "搭乘巴士返回白子站。",
+        image: "/d2-station.jpg" // Reuse station image
+      },
+      { 
+        time: "17:57", 
+        title: "搭乘近鐵特急 (回程)", 
+        type: "transport", 
+        icon: "train", 
+        note: "17:57 發車 (已購票)。預計 18:40 抵達名古屋站。", 
+        location: "Shiroko Station", 
+        transport: "近鐵特急",
+        description: "結束充實的一天，搭乘特急返回名古屋。",
+        image: "/d1-train.jpg" // Reuse train image
+      },
+      { 
+        time: "18:40", 
+        title: "晚餐與最後採購", 
+        type: "shopping", 
+        icon: "shop", 
+        note: "-", 
+        location: "Nagoya Station", 
+        transport: "步行 (車站周邊)",
+        description: "名古屋車站周邊百貨林立，最後採購的好地方。",
         image: "/d5-shopping.jpg" 
       }
     ]
