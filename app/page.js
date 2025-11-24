@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { MapPin, Clock, Info, Navigation, Sun, CloudRain, Coffee, Camera, Train, ShoppingBag, Home, Star, ChevronRight, Users, Plane, X, Image as ImageIcon } from 'lucide-react';
+import { MapPin, Clock, Info, Navigation, Sun, CloudRain, Coffee, Camera, Train, ShoppingBag, Home, Star, ChevronRight, Users, Plane, X, Image as ImageIcon, Leaf } from 'lucide-react';
 
 // 圖片路徑已改為讀取 public 資料夾內的圖片
 // 請確保您上傳的圖片檔名與下方 image 欄位一致 (不分大小寫，建議全小寫)
@@ -215,14 +215,17 @@ const getIcon = (type) => {
   }
 };
 
+// 🍁 賞楓主題配色 🍁
+// 從原本的冷色調改為暖色調 (Orange, Amber, Red, Stone)
 const getColor = (type) => {
     switch (type) {
-        case 'transport': return 'bg-blue-100 text-blue-700 border-blue-200';
-        case 'food': return 'bg-orange-100 text-orange-700 border-orange-200';
-        case 'activity': return 'bg-rose-100 text-rose-700 border-rose-200';
-        case 'shopping': return 'bg-purple-100 text-purple-700 border-purple-200';
-        case 'car': return 'bg-green-100 text-green-700 border-green-200';
-        default: return 'bg-gray-100 text-gray-700 border-gray-200';
+        case 'transport': return 'bg-sky-100 text-sky-800 border-sky-200'; // 交通保留藍色系，增加對比
+        case 'food': return 'bg-orange-100 text-orange-800 border-orange-200'; // 美食維持暖橙色
+        case 'activity': return 'bg-rose-100 text-rose-800 border-rose-200'; // 景點使用玫瑰紅，呼應楓葉
+        case 'shopping': return 'bg-amber-100 text-amber-800 border-amber-200'; // 購物使用琥珀金，秋天的感覺
+        case 'hotel': return 'bg-stone-200 text-stone-700 border-stone-300'; // 住宿使用沉穩的岩石灰
+        case 'car': return 'bg-emerald-100 text-emerald-800 border-emerald-200'; // 自駕使用翡翠綠，與山景呼應
+        default: return 'bg-stone-100 text-stone-600 border-stone-200';
     }
 }
 
@@ -231,10 +234,8 @@ export default function App() {
   const [showInstall, setShowInstall] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null); 
 
-  // Check if running on iOS safely
   useEffect(() => {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    // Simple check: if standard browser mode, show hint
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     if (isIOS && !isStandalone) {
       setShowInstall(true);
@@ -249,181 +250,197 @@ export default function App() {
   const currentItinerary = itineraryData[activeDay];
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50 font-sans max-w-md mx-auto shadow-2xl overflow-hidden relative">
+    // 背景色改為 Stone-50 (米白色)，更有質感
+    <div className="flex flex-col h-screen bg-stone-50 font-sans max-w-md mx-auto shadow-2xl overflow-hidden relative text-stone-800">
       
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 pt-8 pb-4 shrink-0 shadow-md">
-        <div className="flex justify-between items-center mb-1">
-            <h1 className="text-xl font-bold tracking-wide">名古屋親子六日遊</h1>
-            <div className="flex items-center space-x-2 bg-white/20 px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+      {/* Header: 改為「楓紅漸層」 (Orange to Red) */}
+      <div className="bg-gradient-to-br from-orange-700 via-red-700 to-red-800 text-white p-4 pt-10 pb-6 shrink-0 shadow-md relative overflow-hidden">
+        {/* 裝飾用背景楓葉 (半透明) */}
+        <Leaf className="absolute top-4 right-4 text-white/10 w-24 h-24 -rotate-12" />
+        <Leaf className="absolute bottom-[-10px] left-10 text-white/10 w-16 h-16 rotate-45" />
+
+        <div className="flex justify-between items-center mb-2 relative z-10">
+            <h1 className="text-2xl font-bold tracking-wide text-white drop-shadow-md">名古屋賞楓之旅</h1>
+            <div className="flex items-center space-x-2 bg-white/20 px-3 py-1 rounded-full text-sm backdrop-blur-md border border-white/30">
                 <Users size={14} />
-                <span>2大1小(3歲)</span>
+                <span>2大1小</span>
             </div>
         </div>
-        <div className="flex items-center justify-between text-blue-100 text-sm">
+        <div className="flex items-center justify-between text-orange-50 text-sm relative z-10 font-medium">
             <span>2025/11/25 - 11/30</span>
             <div className="flex items-center space-x-1">
-               {currentItinerary.weather.includes('雨') ? <CloudRain size={14} /> : <Sun size={14} />}
+               {currentItinerary.weather.includes('雨') ? <CloudRain size={16} /> : <Sun size={16} />}
                <span>{currentItinerary.temp}</span>
             </div>
         </div>
       </div>
 
-      {/* Date Tabs */}
-      <div className="flex overflow-x-auto bg-white border-b border-gray-200 shrink-0 no-scrollbar">
+      {/* Date Tabs: 選中狀態改為紅色系 */}
+      <div className="flex overflow-x-auto bg-white border-b border-stone-200 shrink-0 no-scrollbar">
         {itineraryData.map((day, index) => (
           <button
             key={index}
             onClick={() => setActiveDay(index)}
-            className={`flex-shrink-0 flex flex-col items-center justify-center px-5 py-3 min-w-[80px] transition-colors
+            className={`flex-shrink-0 flex flex-col items-center justify-center px-5 py-3 min-w-[80px] transition-all duration-300
               ${activeDay === index 
-                ? 'border-b-4 border-blue-600 bg-blue-50 text-blue-700' 
-                : 'text-gray-500 hover:bg-gray-50'}`}
+                ? 'border-b-4 border-red-600 bg-orange-50 text-red-700 font-bold' 
+                : 'text-stone-400 hover:bg-stone-50 hover:text-stone-600'}`}
           >
-            <span className="text-xs font-medium">{day.label}</span>
-            <span className="text-sm font-bold">{day.weekday}</span>
+            <span className="text-xs mb-0.5">{day.label}</span>
+            <span className="text-sm">{day.weekday}</span>
           </button>
         ))}
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20 scroll-smooth">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24 scroll-smooth bg-stone-50">
         
         {/* Day Header */}
-        <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-slate-800">{currentItinerary.date} 行程</h2>
-            <span className="text-sm text-slate-500 bg-slate-200 px-2 py-1 rounded">
+        <div className="flex items-center justify-between mb-4 px-1">
+            <h2 className="text-xl font-bold text-stone-800 flex items-center">
+              <span className="w-1.5 h-6 bg-red-600 rounded-full mr-2"></span>
+              {currentItinerary.date} 行程
+            </h2>
+            <span className="text-xs font-medium text-stone-500 bg-stone-200/60 px-2 py-1 rounded border border-stone-200">
                 {currentItinerary.weather}
             </span>
         </div>
 
         {/* Timeline */}
-        <div className="relative border-l-2 border-slate-200 ml-3 space-y-6">
+        <div className="relative border-l-2 border-stone-300 ml-3 space-y-8">
           {currentItinerary.activities.map((item, idx) => (
             <div key={idx} className="mb-6 ml-6 relative group">
-              {/* Dot */}
-              <div className={`absolute -left-[31px] top-1 w-4 h-4 rounded-full border-2 border-white shadow-sm z-10 ${getColor(item.type).split(' ')[0].replace('bg-', 'bg-')}`}></div>
+              {/* Dot: 顏色隨類別變化 */}
+              <div className={`absolute -left-[33px] top-1 w-4 h-4 rounded-full border-2 border-stone-50 shadow-sm z-10 ${getColor(item.type).split(' ')[0].replace('bg-', 'bg-')}`}></div>
               
-              {/* Card - Now Clickable */}
+              {/* Card - Clickable with Hover Effect */}
               <div 
                 onClick={() => setSelectedActivity(item)}
-                className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 active:scale-[0.98] transition-transform duration-100 cursor-pointer hover:shadow-md"
+                className="bg-white p-4 rounded-2xl shadow-sm border border-stone-100 active:scale-[0.98] transition-all duration-200 cursor-pointer hover:shadow-md hover:border-orange-200"
               >
-                <div className="flex justify-between items-start mb-2">
+                <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center space-x-2">
-                        <span className={`px-2 py-0.5 rounded text-xs font-bold ${getColor(item.type)}`}>
+                        <span className={`px-2.5 py-1 rounded-lg text-xs font-bold shadow-sm ${getColor(item.type)}`}>
                             {item.time}
                         </span>
                     </div>
                     {/* Icon Circle */}
-                    <div className={`p-1.5 rounded-full opacity-80 ${getColor(item.type)}`}>
+                    <div className={`p-2 rounded-full opacity-90 ${getColor(item.type)}`}>
                         {getIcon(item.type)}
                     </div>
                 </div>
 
-                <h3 className="text-base font-bold text-slate-800 mb-1 leading-tight flex items-center">
+                <h3 className="text-lg font-bold text-stone-800 mb-1 leading-tight flex items-center">
                     {item.title}
-                    <Info size={14} className="ml-2 text-slate-300" />
+                    <Info size={16} className="ml-auto text-stone-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </h3>
 
                 {item.note && item.note !== "-" && (
-                    <p className="text-sm text-slate-500 mb-2 leading-relaxed">
+                    <p className="text-sm text-stone-500 mb-3 leading-relaxed">
                         {item.note}
                     </p>
                 )}
 
                 {/* Info Footer */}
-                <div className="mt-3 pt-3 border-t border-slate-50 flex flex-col gap-2 text-xs text-slate-600">
+                <div className="mt-3 pt-3 border-t border-stone-100 flex items-center text-xs text-stone-500 font-medium">
                     {item.transport && item.transport !== "-" && (
                         <div className="flex items-center space-x-1.5">
-                            <Train size={14} className="text-slate-400" />
-                            <span>交通: {item.transport}</span>
+                            <Train size={14} className="text-stone-400" />
+                            <span>{item.transport}</span>
                         </div>
                     )}
+                    <span className="ml-auto text-orange-400 flex items-center text-[10px]">
+                       查看詳情 <ChevronRight size={12} />
+                    </span>
                 </div>
               </div>
             </div>
           ))}
         </div>
         
-        <div className="text-center text-xs text-slate-400 py-6">
-            已經到底了，記得早點休息！ 😴
+        <div className="text-center text-xs text-stone-400 py-8">
+            🍁 祝您有個美好的賞楓之旅 🍁
         </div>
       </div>
 
       {/* Detail Modal */}
       {selectedActivity && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
+        <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 ring-1 ring-black/5">
             
             {/* Modal Image Area */}
-            <div className="relative h-48 bg-slate-200 shrink-0">
+            <div className="relative h-56 bg-stone-200 shrink-0 group">
                {selectedActivity.image ? (
                   <img 
                     src={selectedActivity.image} 
                     alt={selectedActivity.title} 
-                    className="w-full h-full object-cover transition-opacity duration-300"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     onError={(e) => {
                         e.target.onerror = null; 
-                        e.target.style.display = 'none'; // Hide broken image
-                        e.target.nextSibling.style.display = 'flex'; // Show fallback
+                        e.target.style.display = 'none'; 
+                        e.target.nextSibling.style.display = 'flex'; 
                     }}
                   />
                ) : null}
-               {/* Fallback Element (Hidden by default, shown on error) */}
-               <div className="w-full h-full absolute top-0 left-0 flex items-center justify-center bg-slate-100 text-slate-300" style={{display: selectedActivity.image ? 'none' : 'flex'}}>
+               {/* Fallback Element */}
+               <div className="w-full h-full absolute top-0 left-0 flex items-center justify-center bg-stone-100 text-stone-300" style={{display: selectedActivity.image ? 'none' : 'flex'}}>
                      <ImageIcon size={48} />
                </div>
+
+               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
                <button 
                   onClick={(e) => {
                       e.stopPropagation();
                       setSelectedActivity(null);
                   }}
-                  className="absolute top-3 right-3 bg-black/30 hover:bg-black/50 text-white p-1.5 rounded-full backdrop-blur-md transition-colors z-10"
+                  className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white p-1.5 rounded-full backdrop-blur-md transition-colors z-10"
                 >
                   <X size={20} />
                </button>
-               <div className={`absolute bottom-3 left-3 px-3 py-1 rounded-full text-xs font-bold shadow-sm backdrop-blur-md bg-white/90 z-10 ${getColor(selectedActivity.type).split(' ')[1]}`}>
-                  {selectedActivity.time}
+               
+               <div className="absolute bottom-4 left-4 text-white z-10">
+                  <div className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold mb-1 shadow-sm backdrop-blur-md border border-white/20 ${getColor(selectedActivity.type)}`}>
+                      {selectedActivity.time}
+                  </div>
+                  <h2 className="text-xl font-bold leading-tight shadow-black drop-shadow-md">{selectedActivity.title}</h2>
                </div>
             </div>
 
             {/* Modal Content */}
-            <div className="p-6 overflow-y-auto">
-              <h2 className="text-xl font-bold text-slate-800 mb-3">{selectedActivity.title}</h2>
-              
-              <div className="space-y-4">
+            <div className="p-6 overflow-y-auto bg-white">
+              <div className="space-y-5">
                  {/* Description */}
-                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
+                 <div className="text-stone-600 text-sm leading-7 whitespace-pre-line">
                       {selectedActivity.description || "暫無詳細介紹。"}
-                    </p>
                  </div>
 
-                 {/* Note */}
-                 {selectedActivity.note && (
-                    <div className="flex items-start space-x-3 text-sm text-slate-500">
-                        <Info size={18} className="shrink-0 mt-0.5 text-blue-400" />
-                        <span>{selectedActivity.note}</span>
-                    </div>
-                 )}
+                 <div className="border-t border-stone-100 pt-4 space-y-3">
+                    {/* Note */}
+                    {selectedActivity.note && (
+                        <div className="flex items-start space-x-3 text-sm text-stone-600 bg-stone-50 p-3 rounded-lg">
+                            <Info size={18} className="shrink-0 mt-0.5 text-orange-500" />
+                            <span>{selectedActivity.note}</span>
+                        </div>
+                    )}
 
-                 {/* Transport Info */}
-                 {selectedActivity.transport && (
-                    <div className="flex items-start space-x-3 text-sm text-slate-500">
-                        <Train size={18} className="shrink-0 mt-0.5 text-green-500" />
-                        <span>交通：{selectedActivity.transport}</span>
-                    </div>
-                 )}
+                    {/* Transport Info */}
+                    {selectedActivity.transport && (
+                        <div className="flex items-start space-x-3 text-sm text-stone-600 bg-stone-50 p-3 rounded-lg">
+                            <Train size={18} className="shrink-0 mt-0.5 text-emerald-600" />
+                            <span>交通：{selectedActivity.transport}</span>
+                        </div>
+                    )}
+                 </div>
               </div>
             </div>
 
             {/* Modal Footer Actions */}
-            <div className="p-4 border-t border-slate-100 bg-slate-50 shrink-0">
+            <div className="p-4 border-t border-stone-100 bg-stone-50 shrink-0">
                <button 
                   onClick={() => openMap(selectedActivity.location)}
-                  className="flex items-center justify-center w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98]"
+                  // 導航按鈕改為楓葉紅
+                  className="flex items-center justify-center w-full py-3.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white rounded-xl font-bold shadow-lg shadow-orange-200 transition-all active:scale-[0.98]"
                >
                   <Navigation size={18} className="mr-2" />
                   Google Map 導航
@@ -435,13 +452,13 @@ export default function App() {
 
       {/* iOS Install Hint Overlay */}
       {showInstall && (
-        <div className="absolute bottom-4 left-4 right-4 bg-slate-900/90 text-white p-4 rounded-xl shadow-2xl backdrop-blur text-sm z-50 animate-in slide-in-from-bottom-5">
-            <div className="flex justify-between items-start">
-                <div>
-                    <p className="font-bold mb-1">安裝到手機</p>
-                    <p className="text-slate-300">點擊 Safari 下方的分享按鈕 <span className="inline-block px-1 bg-slate-700 rounded">⎋</span>，然後選擇「加入主畫面」。</p>
+        <div className="absolute bottom-6 left-6 right-6 bg-stone-800/95 text-white p-5 rounded-2xl shadow-2xl backdrop-blur-md text-sm z-50 animate-in slide-in-from-bottom-10 border border-white/10">
+            <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                    <p className="font-bold mb-1 text-base">加入主畫面</p>
+                    <p className="text-stone-300 leading-relaxed">點擊 Safari 下方的分享按鈕 <span className="inline-block px-1.5 py-0.5 bg-stone-700 rounded mx-1">⎋</span>，然後選擇「加入主畫面」即可獲得最佳體驗。</p>
                 </div>
-                <button onClick={() => setShowInstall(false)} className="text-slate-400 hover:text-white">✕</button>
+                <button onClick={() => setShowInstall(false)} className="text-stone-400 hover:text-white p-1">✕</button>
             </div>
         </div>
       )}
