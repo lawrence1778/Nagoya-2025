@@ -2,7 +2,7 @@ import "./globals.css";
 
 export const metadata = {
   title: "名古屋親子六日遊",
-  description: "2025名古屋家庭旅遊行程表",
+  description: "2024名古屋家庭旅遊行程表",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
