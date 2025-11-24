@@ -3,8 +3,65 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Clock, Info, Navigation, Sun, CloudRain, Coffee, Camera, Train, ShoppingBag, Home, Star, ChevronRight, Users, Plane, X, Image as ImageIcon, Leaf } from 'lucide-react';
 
-// 圖片路徑已改為讀取 public 資料夾內的圖片
-// 請確保您上傳的圖片檔名與下方 image 欄位一致 (不分大小寫，建議全小寫)
+// 🍁 楓葉飄落動畫組件 🍁
+const FallingLeaves = () => {
+  const [leaves, setLeaves] = useState([]);
+
+  useEffect(() => {
+    // 在客戶端生成隨機楓葉，避免 SSR 不匹配
+    const leafCount = 15; // 畫面上的楓葉數量
+    const newLeaves = Array.from({ length: leafCount }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100, // 隨機水平位置 (0-100%)
+      animationDuration: 10 + Math.random() * 15, // 飄落時間 (10-25秒)，慢一點比較優雅
+      delay: Math.random() * 20, // 隨機延遲，避免同時落下
+      size: 12 + Math.random() * 14, // 大小變化
+      rotation: Math.random() * 360, // 初始旋轉
+      // 秋天配色：紅、橙、琥珀
+      color: ['text-red-500/40', 'text-orange-500/40', 'text-amber-500/40', 'text-red-400/40'][Math.floor(Math.random() * 4)]
+    }));
+    setLeaves(newLeaves);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-[1] h-full w-full" aria-hidden="true">
+      <style jsx>{`
+        @keyframes fall {
+          0% {
+            transform: translateY(-10vh) translateX(0) rotate(0deg);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(110vh) translateX(20px) rotate(360deg);
+            opacity: 0;
+          }
+        }
+      `}</style>
+      {leaves.map((leaf) => (
+        <div
+          key={leaf.id}
+          className={`absolute top-[-20px] ${leaf.color}`}
+          style={{
+            left: `${leaf.left}%`,
+            width: `${leaf.size}px`,
+            height: `${leaf.size}px`,
+            animation: `fall ${leaf.animationDuration}s linear infinite`,
+            animationDelay: `-${leaf.delay}s`, // 負數延遲讓動畫直接開始，不用等
+            transform: `rotate(${leaf.rotation}deg)`
+          }}
+        >
+          {/* 使用 lucide-react 的 Leaf icon，並填滿顏色 */}
+          <Leaf size={leaf.size} fill="currentColor" strokeWidth={0.5} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// 圖片路徑
 const itineraryData = [
   {
     date: "2025-11-25",
@@ -215,16 +272,14 @@ const getIcon = (type) => {
   }
 };
 
-// 🍁 賞楓主題配色 🍁
-// 從原本的冷色調改為暖色調 (Orange, Amber, Red, Stone)
 const getColor = (type) => {
     switch (type) {
-        case 'transport': return 'bg-sky-100 text-sky-800 border-sky-200'; // 交通保留藍色系，增加對比
-        case 'food': return 'bg-orange-100 text-orange-800 border-orange-200'; // 美食維持暖橙色
-        case 'activity': return 'bg-rose-100 text-rose-800 border-rose-200'; // 景點使用玫瑰紅，呼應楓葉
-        case 'shopping': return 'bg-amber-100 text-amber-800 border-amber-200'; // 購物使用琥珀金，秋天的感覺
-        case 'hotel': return 'bg-stone-200 text-stone-700 border-stone-300'; // 住宿使用沉穩的岩石灰
-        case 'car': return 'bg-emerald-100 text-emerald-800 border-emerald-200'; // 自駕使用翡翠綠，與山景呼應
+        case 'transport': return 'bg-sky-100 text-sky-800 border-sky-200';
+        case 'food': return 'bg-orange-100 text-orange-800 border-orange-200';
+        case 'activity': return 'bg-rose-100 text-rose-800 border-rose-200';
+        case 'shopping': return 'bg-amber-100 text-amber-800 border-amber-200';
+        case 'hotel': return 'bg-stone-200 text-stone-700 border-stone-300';
+        case 'car': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
         default: return 'bg-stone-100 text-stone-600 border-stone-200';
     }
 }
@@ -250,12 +305,14 @@ export default function App() {
   const currentItinerary = itineraryData[activeDay];
 
   return (
-    // 背景色改為 Stone-50 (米白色)，更有質感
     <div className="flex flex-col h-screen bg-stone-50 font-sans max-w-md mx-auto shadow-2xl overflow-hidden relative text-stone-800">
       
-      {/* Header: 改為「楓紅漸層」 (Orange to Red) */}
-      <div className="bg-gradient-to-br from-orange-700 via-red-700 to-red-800 text-white p-4 pt-10 pb-6 shrink-0 shadow-md relative overflow-hidden">
-        {/* 裝飾用背景楓葉 (半透明) */}
+      {/* 🍂 楓葉飄落動畫圖層 (放在最底層，但在背景之上) */}
+      <FallingLeaves />
+
+      {/* Header */}
+      <div className="bg-gradient-to-br from-orange-700 via-red-700 to-red-800 text-white p-4 pt-10 pb-6 shrink-0 shadow-md relative overflow-hidden z-10">
+        {/* 裝飾用背景大楓葉 */}
         <Leaf className="absolute top-4 right-4 text-white/10 w-24 h-24 -rotate-12" />
         <Leaf className="absolute bottom-[-10px] left-10 text-white/10 w-16 h-16 rotate-45" />
 
@@ -275,8 +332,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* Date Tabs: 選中狀態改為紅色系 */}
-      <div className="flex overflow-x-auto bg-white border-b border-stone-200 shrink-0 no-scrollbar">
+      {/* Date Tabs: z-10 確保在楓葉之上 */}
+      <div className="flex overflow-x-auto bg-white border-b border-stone-200 shrink-0 no-scrollbar z-10">
         {itineraryData.map((day, index) => (
           <button
             key={index}
@@ -292,8 +349,9 @@ export default function App() {
         ))}
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24 scroll-smooth bg-stone-50">
+      {/* Main Content Area: 設定背景為透明或半透明，讓楓葉可以在背後顯示，或是設定內容卡片為不透明 */}
+      {/* 這裡我將 content area 背景設為透明，讓楓葉可以貫穿整個畫面，但卡片是白色的所以文字清楚 */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24 scroll-smooth z-10 relative">
         
         {/* Day Header */}
         <div className="flex items-center justify-between mb-4 px-1">
@@ -301,7 +359,7 @@ export default function App() {
               <span className="w-1.5 h-6 bg-red-600 rounded-full mr-2"></span>
               {currentItinerary.date} 行程
             </h2>
-            <span className="text-xs font-medium text-stone-500 bg-stone-200/60 px-2 py-1 rounded border border-stone-200">
+            <span className="text-xs font-medium text-stone-500 bg-stone-200/60 px-2 py-1 rounded border border-stone-200 backdrop-blur-sm">
                 {currentItinerary.weather}
             </span>
         </div>
@@ -310,13 +368,13 @@ export default function App() {
         <div className="relative border-l-2 border-stone-300 ml-3 space-y-8">
           {currentItinerary.activities.map((item, idx) => (
             <div key={idx} className="mb-6 ml-6 relative group">
-              {/* Dot: 顏色隨類別變化 */}
+              {/* Dot */}
               <div className={`absolute -left-[33px] top-1 w-4 h-4 rounded-full border-2 border-stone-50 shadow-sm z-10 ${getColor(item.type).split(' ')[0].replace('bg-', 'bg-')}`}></div>
               
-              {/* Card - Clickable with Hover Effect */}
+              {/* Card */}
               <div 
                 onClick={() => setSelectedActivity(item)}
-                className="bg-white p-4 rounded-2xl shadow-sm border border-stone-100 active:scale-[0.98] transition-all duration-200 cursor-pointer hover:shadow-md hover:border-orange-200"
+                className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-stone-100 active:scale-[0.98] transition-all duration-200 cursor-pointer hover:shadow-md hover:border-orange-200"
               >
                 <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center space-x-2">
@@ -363,7 +421,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Detail Modal */}
+      {/* Detail Modal: z-50 最上層 */}
       {selectedActivity && (
         <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 ring-1 ring-black/5">
@@ -439,7 +497,6 @@ export default function App() {
             <div className="p-4 border-t border-stone-100 bg-stone-50 shrink-0">
                <button 
                   onClick={() => openMap(selectedActivity.location)}
-                  // 導航按鈕改為楓葉紅
                   className="flex items-center justify-center w-full py-3.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white rounded-xl font-bold shadow-lg shadow-orange-200 transition-all active:scale-[0.98]"
                >
                   <Navigation size={18} className="mr-2" />
