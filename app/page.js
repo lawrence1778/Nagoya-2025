@@ -1,23 +1,21 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { MapPin, Clock, Info, Navigation, Sun, CloudRain, Coffee, Camera, Train, ShoppingBag, Home, Star, ChevronRight, Users, Plane, X, Image as ImageIcon, Leaf } from 'lucide-react';
+import { MapPin, Clock, Info, Navigation, Sun, CloudRain, Coffee, Camera, Train, ShoppingBag, Home, Star, ChevronRight, Users, Plane, X, Image as ImageIcon, Leaf, CheckCircle2, Circle, ThumbsUp, AlertTriangle, ListTodo, ClipboardCheck } from 'lucide-react';
 
 // 🍁 楓葉飄落動畫組件 🍁
 const FallingLeaves = () => {
   const [leaves, setLeaves] = useState([]);
 
   useEffect(() => {
-    // 在客戶端生成隨機楓葉，避免 SSR 不匹配
-    const leafCount = 15; // 畫面上的楓葉數量
+    const leafCount = 15;
     const newLeaves = Array.from({ length: leafCount }).map((_, i) => ({
       id: i,
-      left: Math.random() * 100, // 隨機水平位置 (0-100%)
-      animationDuration: 10 + Math.random() * 15, // 飄落時間 (10-25秒)，慢一點比較優雅
-      delay: Math.random() * 20, // 隨機延遲，避免同時落下
-      size: 12 + Math.random() * 14, // 大小變化
-      rotation: Math.random() * 360, // 初始旋轉
-      // 秋天配色：紅、橙、琥珀
+      left: Math.random() * 100,
+      animationDuration: 10 + Math.random() * 15,
+      delay: Math.random() * 20,
+      size: 12 + Math.random() * 14,
+      rotation: Math.random() * 360,
       color: ['text-red-500/40', 'text-orange-500/40', 'text-amber-500/40', 'text-red-400/40'][Math.floor(Math.random() * 4)]
     }));
     setLeaves(newLeaves);
@@ -27,17 +25,9 @@ const FallingLeaves = () => {
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-[1] h-full w-full" aria-hidden="true">
       <style jsx>{`
         @keyframes fall {
-          0% {
-            transform: translateY(-10vh) translateX(0) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(110vh) translateX(20px) rotate(360deg);
-            opacity: 0;
-          }
+          0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+          10% { opacity: 1; }
+          100% { transform: translateY(110vh) translateX(20px) rotate(360deg); opacity: 0; }
         }
       `}</style>
       {leaves.map((leaf) => (
@@ -49,11 +39,10 @@ const FallingLeaves = () => {
             width: `${leaf.size}px`,
             height: `${leaf.size}px`,
             animation: `fall ${leaf.animationDuration}s linear infinite`,
-            animationDelay: `-${leaf.delay}s`, // 負數延遲讓動畫直接開始，不用等
+            animationDelay: `-${leaf.delay}s`,
             transform: `rotate(${leaf.rotation}deg)`
           }}
         >
-          {/* 使用 lucide-react 的 Leaf icon，並填滿顏色 */}
           <Leaf size={leaf.size} fill="currentColor" strokeWidth={0.5} />
         </div>
       ))}
@@ -61,8 +50,32 @@ const FallingLeaves = () => {
   );
 };
 
-// 圖片路徑
+// 行前檢查清單資料
+const preTripChecklist = [
+  { id: 1, text: "機票與飯店：若尚未付款，請立即完成。", status: "todo", type: "critical" },
+  { id: 2, text: "高山&合掌村一日遊：(已完成) 訂單編號1655475371，請確認集合時間與地點。", status: "done", type: "activity" },
+  { id: 3, text: "餐廳預約 (馬喰一代 11/28 午餐): (已完成) 請再次確認預約時間與分店。", status: "done", type: "food" },
+  { id: 4, text: "鈴鹿賽道挑戰者 (11/29 12:30): (已完成)", status: "done", type: "activity" },
+  { id: 5, text: "餐廳預約 (備長鰻魚飯 Day 2 晚餐): 建議透過官網或請信用卡秘書嘗試預約，以避免現場久候。", status: "todo", type: "food" },
+  { id: 6, text: "樂園/景點門票 (樂高/鈴鹿): (已完成) 請確認票券使用方式 (電子/實體)。", status: "done", type: "activity" },
+  { id: 7, text: "景點門票 (科學館/電視塔): 建議可提早在Klook、KKday等平台購買。", status: "todo", type: "activity" },
+  { id: 8, text: "鐵路車票 (名鐵μ-SKY 去程): (已完成) 11/25 13:07班次。", status: "done", type: "transport" },
+  { id: 9, text: "鐵路車票 (近鐵特急 11/29): (已完成) 去程 09:10 / 回程 17:57。", status: "done", type: "transport" },
+  { id: 10, text: "鐵路車票 (名鐵μ-SKY 回程 11/30): 記下 10/30 開賣日期，準時上網預訂對號座 (建議搭乘07:07或07:37班次)。", status: "todo", type: "transport", highlight: "10/30" },
+  { id: 11, text: "網路與交通卡： 預訂好日本上網SIM卡/WiFi分享器，並確認您的Suica卡內有足夠餘額。", status: "todo", type: "critical" },
+];
+
+// 行程資料 (index 0 為行前頁)
 const itineraryData = [
+  {
+    date: "行前準備",
+    label: "行前",
+    weekday: "叮嚀",
+    weather: "-",
+    temp: "-",
+    isPreTrip: true, // 標記為行前頁面
+    activities: []
+  },
   {
     date: "2025-11-25",
     label: "Day 1",
@@ -307,12 +320,10 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen bg-stone-50 font-sans max-w-md mx-auto shadow-2xl overflow-hidden relative text-stone-800">
       
-      {/* 🍂 楓葉飄落動畫圖層 (放在最底層，但在背景之上) */}
       <FallingLeaves />
 
       {/* Header */}
       <div className="bg-gradient-to-br from-orange-700 via-red-700 to-red-800 text-white p-4 pt-10 pb-6 shrink-0 shadow-md relative overflow-hidden z-10">
-        {/* 裝飾用背景大楓葉 */}
         <Leaf className="absolute top-4 right-4 text-white/10 w-24 h-24 -rotate-12" />
         <Leaf className="absolute bottom-[-10px] left-10 text-white/10 w-16 h-16 rotate-45" />
 
@@ -332,7 +343,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Date Tabs: z-10 確保在楓葉之上 */}
+      {/* Date Tabs */}
       <div className="flex overflow-x-auto bg-white border-b border-stone-200 shrink-0 no-scrollbar z-10">
         {itineraryData.map((day, index) => (
           <button
@@ -349,84 +360,155 @@ export default function App() {
         ))}
       </div>
 
-      {/* Main Content Area: 設定背景為透明或半透明，讓楓葉可以在背後顯示，或是設定內容卡片為不透明 */}
-      {/* 這裡我將 content area 背景設為透明，讓楓葉可以貫穿整個畫面，但卡片是白色的所以文字清楚 */}
+      {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24 scroll-smooth z-10 relative">
         
-        {/* Day Header */}
-        <div className="flex items-center justify-between mb-4 px-1">
-            <h2 className="text-xl font-bold text-stone-800 flex items-center">
-              <span className="w-1.5 h-6 bg-red-600 rounded-full mr-2"></span>
-              {currentItinerary.date} 行程
-            </h2>
-            <span className="text-xs font-medium text-stone-500 bg-stone-200/60 px-2 py-1 rounded border border-stone-200 backdrop-blur-sm">
-                {currentItinerary.weather}
-            </span>
-        </div>
+        {currentItinerary.isPreTrip ? (
+          /* ================= 特製「行前叮嚀」頁面 ================= */
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            
+            {/* 1. 總體評價卡片 */}
+            <div className="bg-white/95 backdrop-blur-sm p-5 rounded-2xl shadow-sm border border-stone-100">
+                <div className="flex items-center space-x-3 mb-4 border-b border-stone-100 pb-3">
+                    <div className="p-2 bg-emerald-100 text-emerald-700 rounded-full">
+                        <ThumbsUp size={20} />
+                    </div>
+                    <h2 className="text-lg font-bold text-stone-800">行程總體評價：<span className="text-emerald-600 text-xl">A+</span></h2>
+                </div>
+                <div className="space-y-3 text-sm leading-relaxed">
+                    <p><strong className="text-emerald-700">優點：</strong> 您成功地將親子樂園安排在平日，並將換飯店的行政流程與美食預約完美結合。第一天與第四天調整後，步調更加從容。</p>
+                    <p><strong className="text-orange-600">挑戰：</strong> 第五天（週六）前往鈴鹿賽道依然是人潮高峰，但其餘幾天的行程強度都已在非常舒適的範圍內。</p>
+                </div>
+            </div>
 
-        {/* Timeline */}
-        <div className="relative border-l-2 border-stone-300 ml-3 space-y-8">
-          {currentItinerary.activities.map((item, idx) => (
-            <div key={idx} className="mb-6 ml-6 relative group">
-              {/* Dot */}
-              <div className={`absolute -left-[33px] top-1 w-4 h-4 rounded-full border-2 border-stone-50 shadow-sm z-10 ${getColor(item.type).split(' ')[0].replace('bg-', 'bg-')}`}></div>
-              
-              {/* Card */}
-              <div 
-                onClick={() => setSelectedActivity(item)}
-                className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-stone-100 active:scale-[0.98] transition-all duration-200 cursor-pointer hover:shadow-md hover:border-orange-200"
-              >
-                <div className="flex justify-between items-start mb-3">
-                    <div className="flex items-center space-x-2">
-                        <span className={`px-2.5 py-1 rounded-lg text-xs font-bold shadow-sm ${getColor(item.type)}`}>
-                            {item.time}
+            {/* 2. 每日重點提醒 */}
+            <div className="bg-white/95 backdrop-blur-sm p-5 rounded-2xl shadow-sm border border-stone-100">
+                <div className="flex items-center space-x-3 mb-4 border-b border-stone-100 pb-3">
+                    <div className="p-2 bg-amber-100 text-amber-700 rounded-full">
+                        <AlertTriangle size={20} />
+                    </div>
+                    <h2 className="text-lg font-bold text-stone-800">每日重點提醒</h2>
+                </div>
+                <ul className="space-y-4 text-sm text-stone-600">
+                    <li className="flex gap-3">
+                        <span className="font-bold text-stone-800 shrink-0 bg-stone-100 px-2 py-0.5 rounded h-fit">Day 1</span>
+                        <span>抵達後直奔飯店放行李。下午主攻科學館 2-3 樓兒童區，<strong className="text-red-600 bg-red-50 px-1 rounded">請注意 17:00 閉館</strong>。</span>
+                    </li>
+                    <li className="flex gap-3">
+                        <span className="font-bold text-stone-800 shrink-0 bg-stone-100 px-2 py-0.5 rounded h-fit">Day 4</span>
+                        <span>行程愜意，下午遊覽名古屋城，傍晚前往德川園欣賞夢幻夜楓。</span>
+                    </li>
+                    <li className="flex gap-3">
+                        <span className="font-bold text-stone-800 shrink-0 bg-stone-100 px-2 py-0.5 rounded h-fit">Day 5</span>
+                        <span>挑戰性最高的一天。為確保盡早抵達鈴鹿，<strong className="text-red-600 bg-red-50 px-1 rounded">強烈建議搭計程車</strong>換飯店到名古屋車站，並務必提早至 <strong className="text-red-600">8:00 出發</strong>！</span>
+                    </li>
+                </ul>
+            </div>
+
+            {/* 3. 最終行動清單 */}
+            <div className="bg-white/95 backdrop-blur-sm p-5 rounded-2xl shadow-sm border border-stone-100">
+                <div className="flex items-center space-x-3 mb-4 border-b border-stone-100 pb-3">
+                    <div className="p-2 bg-rose-100 text-rose-700 rounded-full">
+                        <ClipboardCheck size={20} />
+                    </div>
+                    <h2 className="text-lg font-bold text-stone-800">最終行動清單</h2>
+                </div>
+                
+                <div className="space-y-1">
+                    {preTripChecklist.map((item) => (
+                       <div key={item.id} className="flex items-start gap-3 p-2 rounded-lg hover:bg-stone-50 transition-colors group">
+                          {item.status === 'done' ? (
+                              <CheckCircle2 className="text-emerald-500 shrink-0 mt-0.5" size={20} />
+                          ) : (
+                              <Circle className="text-stone-300 shrink-0 mt-0.5 group-hover:text-stone-400" size={20} />
+                          )}
+                          <div className={`text-sm ${item.status === 'done' ? 'text-stone-400 line-through decoration-stone-300' : 'text-stone-700 font-medium'}`}>
+                              {item.text}
+                          </div>
+                       </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="text-center text-xs text-stone-400 pb-8">
+                準備好出發了嗎？名古屋見！ ✈️
+            </div>
+          </div>
+        ) : (
+          /* ================= 一般行程時間軸 (維持原樣) ================= */
+          <div className="animate-in fade-in duration-500">
+            {/* Day Header */}
+            <div className="flex items-center justify-between mb-4 px-1">
+                <h2 className="text-xl font-bold text-stone-800 flex items-center">
+                  <span className="w-1.5 h-6 bg-red-600 rounded-full mr-2"></span>
+                  {currentItinerary.date} 行程
+                </h2>
+                <span className="text-xs font-medium text-stone-500 bg-stone-200/60 px-2 py-1 rounded border border-stone-200 backdrop-blur-sm">
+                    {currentItinerary.weather}
+                </span>
+            </div>
+
+            {/* Timeline */}
+            <div className="relative border-l-2 border-stone-300 ml-3 space-y-8">
+              {currentItinerary.activities.map((item, idx) => (
+                <div key={idx} className="mb-6 ml-6 relative group">
+                  {/* Dot */}
+                  <div className={`absolute -left-[33px] top-1 w-4 h-4 rounded-full border-2 border-stone-50 shadow-sm z-10 ${getColor(item.type).split(' ')[0].replace('bg-', 'bg-')}`}></div>
+                  
+                  {/* Card */}
+                  <div 
+                    onClick={() => setSelectedActivity(item)}
+                    className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-stone-100 active:scale-[0.98] transition-all duration-200 cursor-pointer hover:shadow-md hover:border-orange-200"
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center space-x-2">
+                            <span className={`px-2.5 py-1 rounded-lg text-xs font-bold shadow-sm ${getColor(item.type)}`}>
+                                {item.time}
+                            </span>
+                        </div>
+                        <div className={`p-2 rounded-full opacity-90 ${getColor(item.type)}`}>
+                            {getIcon(item.type)}
+                        </div>
+                    </div>
+
+                    <h3 className="text-lg font-bold text-stone-800 mb-1 leading-tight flex items-center">
+                        {item.title}
+                        <Info size={16} className="ml-auto text-stone-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </h3>
+
+                    {item.note && item.note !== "-" && (
+                        <p className="text-sm text-stone-500 mb-3 leading-relaxed">
+                            {item.note}
+                        </p>
+                    )}
+
+                    <div className="mt-3 pt-3 border-t border-stone-100 flex items-center text-xs text-stone-500 font-medium">
+                        {item.transport && item.transport !== "-" && (
+                            <div className="flex items-center space-x-1.5">
+                                <Train size={14} className="text-stone-400" />
+                                <span>{item.transport}</span>
+                            </div>
+                        )}
+                        <span className="ml-auto text-orange-400 flex items-center text-[10px]">
+                           查看詳情 <ChevronRight size={12} />
                         </span>
                     </div>
-                    {/* Icon Circle */}
-                    <div className={`p-2 rounded-full opacity-90 ${getColor(item.type)}`}>
-                        {getIcon(item.type)}
-                    </div>
+                  </div>
                 </div>
-
-                <h3 className="text-lg font-bold text-stone-800 mb-1 leading-tight flex items-center">
-                    {item.title}
-                    <Info size={16} className="ml-auto text-stone-300 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </h3>
-
-                {item.note && item.note !== "-" && (
-                    <p className="text-sm text-stone-500 mb-3 leading-relaxed">
-                        {item.note}
-                    </p>
-                )}
-
-                {/* Info Footer */}
-                <div className="mt-3 pt-3 border-t border-stone-100 flex items-center text-xs text-stone-500 font-medium">
-                    {item.transport && item.transport !== "-" && (
-                        <div className="flex items-center space-x-1.5">
-                            <Train size={14} className="text-stone-400" />
-                            <span>{item.transport}</span>
-                        </div>
-                    )}
-                    <span className="ml-auto text-orange-400 flex items-center text-[10px]">
-                       查看詳情 <ChevronRight size={12} />
-                    </span>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-        
-        <div className="text-center text-xs text-stone-400 py-8">
-            🍁 祝您有個美好的賞楓之旅 🍁
-        </div>
+            
+            <div className="text-center text-xs text-stone-400 py-8">
+                🍁 祝您有個美好的賞楓之旅 🍁
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Detail Modal: z-50 最上層 */}
+      {/* Detail Modal */}
       {selectedActivity && (
         <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 ring-1 ring-black/5">
-            
-            {/* Modal Image Area */}
             <div className="relative h-56 bg-stone-200 shrink-0 group">
                {selectedActivity.image ? (
                   <img 
@@ -440,13 +522,10 @@ export default function App() {
                     }}
                   />
                ) : null}
-               {/* Fallback Element */}
                <div className="w-full h-full absolute top-0 left-0 flex items-center justify-center bg-stone-100 text-stone-300" style={{display: selectedActivity.image ? 'none' : 'flex'}}>
                      <ImageIcon size={48} />
                </div>
-
                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-
                <button 
                   onClick={(e) => {
                       e.stopPropagation();
@@ -456,7 +535,6 @@ export default function App() {
                 >
                   <X size={20} />
                </button>
-               
                <div className="absolute bottom-4 left-4 text-white z-10">
                   <div className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold mb-1 shadow-sm backdrop-blur-md border border-white/20 ${getColor(selectedActivity.type)}`}>
                       {selectedActivity.time}
@@ -464,25 +542,18 @@ export default function App() {
                   <h2 className="text-xl font-bold leading-tight shadow-black drop-shadow-md">{selectedActivity.title}</h2>
                </div>
             </div>
-
-            {/* Modal Content */}
             <div className="p-6 overflow-y-auto bg-white">
               <div className="space-y-5">
-                 {/* Description */}
                  <div className="text-stone-600 text-sm leading-7 whitespace-pre-line">
                       {selectedActivity.description || "暫無詳細介紹。"}
                  </div>
-
                  <div className="border-t border-stone-100 pt-4 space-y-3">
-                    {/* Note */}
                     {selectedActivity.note && (
                         <div className="flex items-start space-x-3 text-sm text-stone-600 bg-stone-50 p-3 rounded-lg">
                             <Info size={18} className="shrink-0 mt-0.5 text-orange-500" />
                             <span>{selectedActivity.note}</span>
                         </div>
                     )}
-
-                    {/* Transport Info */}
                     {selectedActivity.transport && (
                         <div className="flex items-start space-x-3 text-sm text-stone-600 bg-stone-50 p-3 rounded-lg">
                             <Train size={18} className="shrink-0 mt-0.5 text-emerald-600" />
@@ -492,8 +563,6 @@ export default function App() {
                  </div>
               </div>
             </div>
-
-            {/* Modal Footer Actions */}
             <div className="p-4 border-t border-stone-100 bg-stone-50 shrink-0">
                <button 
                   onClick={() => openMap(selectedActivity.location)}
@@ -507,7 +576,6 @@ export default function App() {
         </div>
       )}
 
-      {/* iOS Install Hint Overlay */}
       {showInstall && (
         <div className="absolute bottom-6 left-6 right-6 bg-stone-800/95 text-white p-5 rounded-2xl shadow-2xl backdrop-blur-md text-sm z-50 animate-in slide-in-from-bottom-10 border border-white/10">
             <div className="flex justify-between items-start gap-4">
