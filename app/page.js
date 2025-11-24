@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Clock, Info, Navigation, Sun, CloudRain, Coffee, Camera, Train, ShoppingBag, Home, Star, ChevronRight, Users, Plane, X, Image as ImageIcon } from 'lucide-react';
 
-// 修復後的資料：圖片連結現在是正確的純網址字串
+// 圖片來源：維基百科 (Wikimedia Commons) 與 Unsplash 均為公開授權
 const itineraryData = [
   {
     date: "2024-11-25",
@@ -19,8 +19,9 @@ const itineraryData = [
         icon: "plane", 
         note: "CI154 (07:50 TPE → 11:25 NGO)", 
         location: "中部国際空港",
-        description: "日本中部的空中門戶，擁有豐富的購物與餐飲設施。特別推薦「FLIGHT OF DREAMS」區域，展示了波音787初號機。",
-        image: "https://images.unsplash.com/photo-1589828859346-7049c4033107?auto=format&fit=crop&w=600&q=80"
+        description: "日本中部的空中門戶。特別推薦「FLIGHT OF DREAMS」區域，展示了波音787初號機。",
+        // Wiki: FLIGHT OF DREAMS
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Flight_of_Dreams_Flight_Park.jpg/800px-Flight_of_Dreams_Flight_Park.jpg"
       },
       { 
         time: "13:07", 
@@ -29,8 +30,9 @@ const itineraryData = [
         icon: "train", 
         note: "已購票，預計 13:37 抵達名古屋站", 
         location: "中部国際空港駅",
-        description: "名古屋鐵道的快速列車，全車指定席，只需28分鐘即可抵達名古屋市中心，舒適又快速。",
-        image: "https://images.unsplash.com/photo-1505560416962-60cb71b80267?auto=format&fit=crop&w=600&q=80"
+        description: "名古屋鐵道的快速列車，全車指定席，只需28分鐘即可抵達名古屋市中心。",
+        // Wiki: Meitetsu 2000 Series
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Meitetsu_2000_Series_2011F.jpg/800px-Meitetsu_2000_Series_2011F.jpg"
       },
       { 
         time: "13:45", 
@@ -40,8 +42,9 @@ const itineraryData = [
         note: "地點：Royal Park Iconic (榮)。先寄行李再用餐。", 
         location: "The Royal Park Hotel Iconic Nagoya", 
         transport: "地鐵 (名古屋→榮)",
-        description: "位於名古屋地標大廈內的高級飯店，交通極為便利。周邊榮商圈美食眾多，適合放下行李後立即探索。",
-        image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80"
+        description: "位於名古屋地標大廈(中日大廈)內的高級飯店，交通極為便利。",
+        // Wiki: Sakae District (Hotel location)
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Sakae_intersection_view_from_Nagoya_TV_Tower.jpg/800px-Sakae_intersection_view_from_Nagoya_TV_Tower.jpg"
       },
       { 
         time: "15:30", 
@@ -51,8 +54,9 @@ const itineraryData = [
         note: "互動設施多，適合 3 歲幼兒，17:00 閉館", 
         location: "名古屋市科学館", 
         transport: "地鐵 (榮→伏見)",
-        description: "擁有世界最大的巨蛋天文館「Brother Earth」。館內充滿讓兒童動手操作的物理與科學實驗裝置，是寓教於樂的最佳去處。",
-        image: "https://images.unsplash.com/photo-1580637151046-2495d4f38753?auto=format&fit=crop&w=600&q=80"
+        description: "擁有世界最大的巨蛋天文館「Brother Earth」。球體外觀非常壯觀。",
+        // Wiki: Nagoya City Science Museum
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Nagoya_City_Science_Museum_2012-02.JPG/800px-Nagoya_City_Science_Museum_2012-02.JPG"
       },
       { 
         time: "17:30", 
@@ -62,8 +66,9 @@ const itineraryData = [
         note: "晚餐、購物、蔦屋書店", 
         location: "AEON Mall Nagoya Noritake Garden", 
         transport: "地鐵 (伏見→龜島)",
-        description: "結合了紅磚倉庫歷史建築與現代商場的複合設施。必看的是蔦屋書店著名的「巨大書牆」，是熱門的打卡景點。",
-        image: "https://images.unsplash.com/photo-1601625463687-25541fb72f62?auto=format&fit=crop&w=600&q=80"
+        description: "結合了紅磚倉庫歷史建築與現代商場的複合設施。風景優美。",
+        // Wiki: Noritake Garden
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Noritake_garden.jpg/800px-Noritake_garden.jpg"
       },
       { 
         time: "20:30", 
@@ -73,7 +78,8 @@ const itineraryData = [
         note: "The Royal Park Hotel Iconic Nagoya", 
         location: "The Royal Park Hotel Iconic Nagoya", 
         transport: "地鐵 (龜島→榮)",
-        description: "結束第一天的行程，回到舒適的客房休息。建議可利用飯店大浴場放鬆身心。",
+        description: "結束第一天的行程，回到舒適的客房休息。",
+        // Unsplash: Cozy Hotel Room (Generic)
         image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=600&q=80"
       }
     ]
@@ -85,23 +91,29 @@ const itineraryData = [
     weather: "晴朗",
     temp: "9°C - 15°C",
     activities: [
-      { time: "08:30", title: "早餐：客美多咖啡", type: "food", icon: "coffee", note: "體驗名古屋特色早餐", location: "Komeda's Coffee Sakae", transport: "步行", description: "名古屋特有的「點飲料送早餐」文化發源地。厚片吐司搭配紅豆泥是絕對不能錯過的經典美味。", 
-        image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" 
+      { time: "08:30", title: "早餐：客美多咖啡", type: "food", icon: "coffee", note: "體驗名古屋特色早餐", location: "Komeda's Coffee Sakae", transport: "步行", description: "名古屋發源的連鎖咖啡店。點飲料送吐司與紅豆泥是經典。", 
+        // Wiki: Komeda Coffee
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Komeda_Coffee_Shop.jpg/800px-Komeda_Coffee_Shop.jpg" 
       },
-      { time: "10:00", title: "樂高樂園 (LEGOLAND)", type: "activity", icon: "play", note: "平日暢玩，幼兒友善", location: "LEGOLAND Japan", transport: "地鐵 + 青波線", description: "專為2-12歲兒童設計的樂園。色彩繽紛的積木世界、溫和的遊樂設施以及精緻的迷你樂園(Miniland)，讓大人小孩都瘋狂。", 
-        image: "https://images.unsplash.com/photo-1560964645-5c9f3da05146?auto=format&fit=crop&w=600&q=80" 
+      { time: "10:00", title: "樂高樂園 (LEGOLAND)", type: "activity", icon: "play", note: "平日暢玩，幼兒友善", location: "LEGOLAND Japan", transport: "地鐵 + 青波線", description: "專為2-12歲兒童設計的樂園。色彩繽紛的積木世界。", 
+        // Wiki: Legoland Japan
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/LEGOLAND_Japan_Entrance.jpg/800px-LEGOLAND_Japan_Entrance.jpg" 
       },
-      { time: "15:00", title: "返回「榮」地區", type: "transport", icon: "train", note: "提早離園，爭取傍晚觀景時間", location: "Sakae Station", transport: "青波線 + 地鐵", description: "避開下班尖峰人潮，悠閒地返回市區。", 
-        image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=600&q=80" 
+      { time: "15:00", title: "返回「榮」地區", type: "transport", icon: "train", note: "提早離園，爭取傍晚觀景時間", location: "Sakae Station", transport: "青波線 + 地鐵", description: "搭乘青波線返回市區。", 
+        // Wiki: Aonami Line
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Aonami_1000_01.jpg/800px-Aonami_1000_01.jpg" 
       },
-      { time: "16:00", title: "Oasis 21 & 名古屋電視塔", type: "activity", icon: "camera", note: "欣賞黃昏與夜景，飯店就在附近", location: "Oasis 21", transport: "步行", description: "Oasis 21 的「水的宇宙船」屋頂可在此散步並欣賞電視塔美景。黃昏時分點燈後，景色更是浪漫迷人。", 
-        image: "https://images.unsplash.com/photo-1623832795666-6f76c72955f2?auto=format&fit=crop&w=600&q=80" 
+      { time: "16:00", title: "Oasis 21 & 名古屋電視塔", type: "activity", icon: "camera", note: "欣賞黃昏與夜景，飯店就在附近", location: "Oasis 21", transport: "步行", description: "Oasis 21 的「水的宇宙船」屋頂可在此散步並欣賞電視塔美景。", 
+        // Wiki: Oasis 21
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Oasis_21_and_Nagoya_TV_Tower_2021.jpg/800px-Oasis_21_and_Nagoya_TV_Tower_2021.jpg" 
       },
-      { time: "19:00", title: "晚餐：備長鰻魚飯", type: "food", icon: "food", note: "榮LACHIC店，建議預約", location: "Hitsumabushi Bincho Sakae Lachic", transport: "步行", description: "名古屋必吃美食！「備長」主打關西風烤法，外皮酥脆、肉質軟嫩，搭配經典的鰻魚三吃（原味、加佐料、茶泡飯）。", 
-        image: "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=600&q=80" 
+      { time: "19:00", title: "晚餐：備長鰻魚飯", type: "food", icon: "food", note: "榮LACHIC店，建議預約", location: "Hitsumabushi Bincho Sakae Lachic", transport: "步行", description: "名古屋必吃美食！鰻魚三吃（Hitsumabushi）。", 
+        // Wiki: Hitsumabushi
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Hitsumabushi_by_Kanesue_in_Nagoya.jpg/800px-Hitsumabushi_by_Kanesue_in_Nagoya.jpg" 
       },
-      { time: "20:30", title: "甜點：HARBS 榮本店", type: "food", icon: "cake", note: "經典水果千層", location: "HARBS Sakae Main Store", transport: "步行", description: "發源於名古屋的傳奇甜點店。招牌水果千層蛋糕，層層堆疊的新鮮水果與清爽鮮奶油，是完美的飯後甜點。", 
-        image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=600&q=80" 
+      { time: "20:30", title: "甜點：HARBS 榮本店", type: "food", icon: "cake", note: "經典水果千層", location: "HARBS Sakae Main Store", transport: "步行", description: "發源於名古屋的傳奇甜點店。招牌水果千層蛋糕。", 
+        // Wiki: Mille crepes (Generic due to brand copyright)
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Mille_crepes.jpg/800px-Mille_crepes.jpg" 
       }
     ]
   },
@@ -112,25 +124,32 @@ const itineraryData = [
     weather: "山區可能微雨",
     temp: "5°C - 12°C",
     activities: [
-      { time: "08:00", title: "Toyota Rent a Car 取車", type: "car", icon: "car", note: "榮店取車，確認兒童座椅 & 雪胎", location: "Toyota Rent a Car Sakae", transport: "步行", description: "辦理租車手續。因前往山區，請務必確認雪胎(Snow Tires)安裝狀況以及兒童安全座椅是否牢固。", 
-        image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=600&q=80" 
+      { time: "08:00", title: "Toyota Rent a Car 取車", type: "car", icon: "car", note: "榮店取車，確認兒童座椅 & 雪胎", location: "Toyota Rent a Car Sakae", transport: "步行", description: "辦理租車手續。出發前往山區。", 
+        // Wiki: Toyota Rent a Car shop
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Toyota_Rent_a_Lease_Aichi_Toko_Tokoname.jpg/800px-Toyota_Rent_a_Lease_Aichi_Toko_Tokoname.jpg" 
       },
-      { time: "08:45", title: "出發前往郡上八幡", type: "transport", icon: "car", note: "自駕約 1.5 小時", location: "Gujo Hachiman", description: "沿著東海北陸自動車道行駛，沿途山景優美。請注意山區天氣變化。", 
+      { time: "08:45", title: "出發前往郡上八幡", type: "transport", icon: "car", note: "自駕約 1.5 小時", location: "Gujo Hachiman", description: "沿著東海北陸自動車道行駛，沿途山景優美。", 
+        // Unsplash: Driving in Japan
         image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" 
       },
-      { time: "10:15", title: "郡上八幡遊覽 & 午餐", type: "activity", icon: "camera", note: "停留約 2 小時，吃蕎麥麵", location: "Gujo Hachiman Castle Town", transport: "停車步行", description: "被稱為「水之都」的古老城下町，清澈的水道流經家家戶戶。這裡也是食物模型的發源地，可以體驗製作樂趣。", 
-        image: "https://images.unsplash.com/photo-1624867375269-8e4785461c2a?auto=format&fit=crop&w=600&q=80" 
+      { time: "10:15", title: "郡上八幡遊覽 & 午餐", type: "activity", icon: "camera", note: "停留約 2 小時，吃蕎麥麵", location: "Gujo Hachiman Castle Town", transport: "停車步行", description: "被稱為「水之都」的古老城下町，清澈的水道流經家家戶戶。", 
+        // Wiki: Gujo Hachiman
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Gujo_Hachiman_Castle_20100829.jpg/800px-Gujo_Hachiman_Castle_20100829.jpg" 
       },
       { time: "12:15", title: "前往白川鄉合掌村", type: "transport", icon: "car", note: "自駕約 1 小時", location: "Shirakawa-go", description: "穿越群山隧道，前往世界遺產。", 
+        // Unsplash: Mountain Road
         image: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=600&q=80" 
       },
-      { time: "13:15", title: "白川鄉合掌村遊覽", type: "activity", icon: "camera", note: "停留 2.5 小時", location: "Shirakawa-go Observation Deck", transport: "停車步行", description: "童話般的合掌造聚落，世界文化遺產。登上城山展望台可俯瞰全村美景，是絕佳的拍照地點。", 
-        image: "https://images.unsplash.com/photo-1545642646-778dfc207909?auto=format&fit=crop&w=600&q=80" 
+      { time: "13:15", title: "白川鄉合掌村遊覽", type: "activity", icon: "camera", note: "停留 2.5 小時", location: "Shirakawa-go Observation Deck", transport: "停車步行", description: "童話般的合掌造聚落，世界文化遺產。登上城山展望台可俯瞰全村美景。", 
+        // Wiki: Shirakawa-go
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Shirakawa-go_Jun_2019.jpg/800px-Shirakawa-go_Jun_2019.jpg" 
       },
       { time: "16:00", title: "準時出發返回名古屋", type: "transport", icon: "car", note: "務必準時，趕 20:00 還車", location: "Nagoya", description: "回程可能遇到傍晚車潮，請預留充裕時間。", 
+        // Unsplash: Highway
         image: "https://images.unsplash.com/photo-1502877338535-766a1452686a?auto=format&fit=crop&w=600&q=80" 
       },
       { time: "20:00", title: "還車 (Nishiki Shop)", type: "car", icon: "car", note: "錦店還車", location: "Toyota Rent a Car Nagoya Nishiki", description: "歸還車輛，結束一日的自駕之旅。", 
+        // Unsplash: Car
         image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80" 
       }
     ]
@@ -142,20 +161,25 @@ const itineraryData = [
     weather: "多雲",
     temp: "8°C - 14°C",
     activities: [
-      { time: "11:30", title: "午餐：馬喰一代", type: "food", icon: "food", note: "已預約，頂級飛騨牛", location: "Bakuroichidai Nagoya Sakae", transport: "地鐵 + 步行", description: "以整頭買入頂級飛驒牛聞名。午間套餐CP值極高，能以實惠價格品嚐到入口即化的霜降牛肉。", 
-        image: "https://images.unsplash.com/photo-1615937657715-bc7b4b7962c1?auto=format&fit=crop&w=600&q=80" 
+      { time: "11:30", title: "午餐：馬喰一代", type: "food", icon: "food", note: "已預約，頂級飛騨牛", location: "Bakuroichidai Nagoya Sakae", transport: "地鐵 + 步行", description: "頂級飛驒牛專賣店。品嚐入口即化的霜降牛肉。", 
+        // Wiki: Hida Beef
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hida_Beef_Grilled.jpg/800px-Hida_Beef_Grilled.jpg" 
       },
-      { time: "13:30", title: "參觀名古屋城", type: "activity", icon: "camera", note: "建議買地鐵一日券", location: "Nagoya Castle", transport: "地鐵 (需轉乘)", description: "日本三大名城之一，屋頂上的金鯱是名古屋的象徵。復原後的本丸御殿金碧輝煌，非常值得一看。", 
-        image: "https://images.unsplash.com/photo-1624253321171-1be53e12f5f4?auto=format&fit=crop&w=600&q=80" 
+      { time: "13:30", title: "參觀名古屋城", type: "activity", icon: "camera", note: "建議買地鐵一日券", location: "Nagoya Castle", transport: "地鐵 (需轉乘)", description: "日本三大名城之一，屋頂上的金鯱是名古屋的象徵。", 
+        // Wiki: Nagoya Castle
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Nagoya_Castle_Main_Keep_2018.jpg/800px-Nagoya_Castle_Main_Keep_2018.jpg" 
       },
-      { time: "16:00", title: "返回 Royal Park 休息", type: "hotel", icon: "hotel", note: "帶小孩稍作午休，為夜楓保留體力", location: "The Royal Park Hotel Iconic Nagoya", description: "中場休息充電，對於親子遊來說非常重要。", 
+      { time: "16:00", title: "返回 Royal Park 休息", type: "hotel", icon: "hotel", note: "帶小孩稍作午休，為夜楓保留體力", location: "The Royal Park Hotel Iconic Nagoya", description: "中場休息充電。", 
+        // Unsplash: Rest
         image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80" 
       },
-      { time: "17:30", title: "德川園 (夜楓)", type: "activity", icon: "tree", note: "日式庭園精緻夜楓", location: "Tokugawaen", transport: "地鐵 (榮→大曾根)", description: "尾張德川家的池泉回遊式庭園。秋季夜間點燈時，紅葉倒映在龍仙湖面，營造出夢幻般的幽玄世界。", 
-        image: "https://images.unsplash.com/photo-1605684617300-4b2d56a06649?auto=format&fit=crop&w=600&q=80" 
+      { time: "17:30", title: "德川園 (夜楓)", type: "activity", icon: "tree", note: "日式庭園精緻夜楓", location: "Tokugawaen", transport: "地鐵 (榮→大曾根)", description: "尾張德川家的池泉回遊式庭園。秋季夜間點燈，景色夢幻。", 
+        // Wiki: Tokugawaen
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Tokugawa-en_Ryusenko.jpg/800px-Tokugawa-en_Ryusenko.jpg" 
       },
-      { time: "20:00", title: "榮商圈 晚餐與購物", type: "shopping", icon: "shop", note: "週五夜晚熱鬧氣氛", location: "Sakae Shopping District", transport: "地鐵", description: "名古屋最繁華的商業區，百貨林立。推薦去唐吉訶德摩天輪店採購伴手禮。", 
-        image: "https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=600&q=80" 
+      { time: "20:00", title: "榮商圈 晚餐與購物", type: "shopping", icon: "shop", note: "週五夜晚熱鬧氣氛", location: "Sakae Shopping District", transport: "地鐵", description: "名古屋最繁華的商業區，百貨林立。", 
+        // Wiki: Sakae Night
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Oasis_21_and_Nagoya_TV_Tower.jpg/800px-Oasis_21_and_Nagoya_TV_Tower.jpg" 
       }
     ]
   },
@@ -166,17 +190,21 @@ const itineraryData = [
     weather: "晴朗",
     temp: "10°C - 17°C",
     activities: [
-      { time: "08:00", title: "Check-out & 移動", type: "transport", icon: "taxi", note: "搭計程車至 JR 門樓酒店寄放行李", location: "Nagoya JR Gate Tower Hotel", transport: "計程車", description: "轉換住宿地點至名古屋車站上方，方便明日搭機。", 
-        image: "https://images.unsplash.com/photo-1549195667-80a5e2873401?auto=format&fit=crop&w=600&q=80" 
+      { time: "08:00", title: "Check-out & 移動", type: "transport", icon: "taxi", note: "搭計程車至 JR 門樓酒店寄放行李", location: "Nagoya JR Gate Tower Hotel", transport: "計程車", description: "轉換住宿地點至名古屋車站上方。", 
+        // Wiki: Nagoya Station / JR Gate Tower
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Nagoya_Station_JR_Gate_Tower_2017.jpg/800px-Nagoya_Station_JR_Gate_Tower_2017.jpg" 
       },
-      { time: "10:30", title: "抵達鈴鹿賽道樂園", type: "activity", icon: "flag", note: "開園初期抵達，幼兒友善設施", location: "Suzuka Circuit Park", transport: "巴士 + 步行", description: "以賽車為主題的樂園，許多設施都可由兒童親自駕駛操作，完成任務還能獲得駕照卡片！", 
-        image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80" 
+      { time: "10:30", title: "抵達鈴鹿賽道樂園", type: "activity", icon: "flag", note: "開園初期抵達，幼兒友善設施", location: "Suzuka Circuit Park", transport: "巴士 + 步行", description: "以賽車為主題的樂園，許多設施都可由兒童親自駕駛操作。", 
+        // Wiki: Suzuka Circuit
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Suzuka_Circuit_Ferris_Wheel.jpg/800px-Suzuka_Circuit_Ferris_Wheel.jpg" 
       },
-      { time: "12:30", title: "賽道挑戰者", type: "activity", icon: "car", note: "預約時段，請準時", location: "Suzuka Circuit Circuit Challenger", description: "在真實的F1賽道上駕駛電動賽車！這是全球獨一無二的體驗，絕對會成為旅程的亮點。", 
-        image: "https://images.unsplash.com/photo-1594956799589-9e32d20d3c0d?auto=format&fit=crop&w=600&q=80" 
+      { time: "12:30", title: "賽道挑戰者", type: "activity", icon: "car", note: "預約時段，請準時", location: "Suzuka Circuit Circuit Challenger", description: "在真實的F1賽道上駕駛電動賽車！", 
+        // Wiki: Suzuka Track
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Suzuka_International_Racing_Course_Main_Straight_2013.jpg/800px-Suzuka_International_Racing_Course_Main_Straight_2013.jpg" 
       },
-      { time: "18:40", title: "晚餐與最後採購", type: "shopping", icon: "shop", note: "車站周邊 (高島屋/Bic Camera)", location: "Nagoya Station", description: "名古屋車站周邊百貨林立，是最後衝刺伴手禮的好地方。高島屋地下街的美食也不容錯過。", 
-        image: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=600&q=80" 
+      { time: "18:40", title: "晚餐與最後採購", type: "shopping", icon: "shop", note: "車站周邊 (高島屋/Bic Camera)", location: "Nagoya Station", description: "名古屋車站周邊百貨林立，是最後衝刺伴手禮的好地方。", 
+        // Wiki: Nagoya Station Night
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/JR_Central_Towers_night_view.jpg/800px-JR_Central_Towers_night_view.jpg" 
       }
     ]
   },
@@ -188,10 +216,12 @@ const itineraryData = [
     temp: "9°C - 15°C",
     activities: [
       { time: "07:00", title: "早餐：Doutor Coffee", type: "food", icon: "coffee", note: "快速解決早餐", location: "Doutor Coffee Nagoya", transport: "步行", description: "簡單快速的日式連鎖咖啡店，確保有充裕時間前往機場。", 
-        image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80" 
+        // Wiki: Doutor Coffee
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Doutor_Coffee_Shop_Funabashi_Station_South_Entrance.jpg/800px-Doutor_Coffee_Shop_Funabashi_Station_South_Entrance.jpg" 
       },
       { time: "09:50", title: "搭乘 CI151 返家", type: "flight", icon: "home", note: "09:50 NGO → 12:40 TPE", location: "Chubu Centrair International Airport", description: "帶著滿滿的回憶與戰利品，平安返家。", 
-        image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80" 
+        // Wiki: China Airlines
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/B-18007_China_Airlines_Boeing_777-300ER_TPE_RCTP_%2838394367072%29.jpg/800px-B-18007_China_Airlines_Boeing_777-300ER_TPE_RCTP_%2838394367072%29.jpg" 
       }
     ]
   }
