@@ -7,18 +7,18 @@ import { MapPin, Clock, Info, Navigation, Sun, CloudRain, Coffee, Camera, Train,
 // 請確保您上傳的圖片檔名與下方 image 欄位一致 (不分大小寫，建議全小寫)
 const itineraryData = [
   {
-    date: "2024-11-25",
+    date: "2025-11-25",
     label: "Day 1",
-    weekday: "週一",
+    weekday: "週二",
     weather: "晴時多雲",
     temp: "10°C - 16°C",
     activities: [
       { 
-        time: "11:25", 
+        time: "11:05", 
         title: "抵達中部國際機場", 
         type: "transport", 
         icon: "plane", 
-        note: "CI154 (07:50 TPE → 11:25 NGO)", 
+        note: "CI0154 (07:35 TPE → 11:05 NGO)", 
         location: "中部国際空港",
         description: "日本中部的空中門戶。推薦前往「FLIGHT OF DREAMS」欣賞波音787初號機的壯觀英姿。",
         image: "/d1-airport.jpg"
@@ -80,9 +80,9 @@ const itineraryData = [
     ]
   },
   {
-    date: "2024-11-26",
+    date: "2025-11-26",
     label: "Day 2",
-    weekday: "週二",
+    weekday: "週三",
     weather: "晴朗",
     temp: "9°C - 15°C",
     activities: [
@@ -107,9 +107,9 @@ const itineraryData = [
     ]
   },
   {
-    date: "2024-11-27",
+    date: "2025-11-27",
     label: "Day 3",
-    weekday: "週三",
+    weekday: "週四",
     weather: "山區可能微雨",
     temp: "5°C - 12°C",
     activities: [
@@ -137,9 +137,9 @@ const itineraryData = [
     ]
   },
   {
-    date: "2024-11-28",
+    date: "2025-11-28",
     label: "Day 4",
-    weekday: "週四",
+    weekday: "週五",
     weather: "多雲",
     temp: "8°C - 14°C",
     activities: [
@@ -161,9 +161,9 @@ const itineraryData = [
     ]
   },
   {
-    date: "2024-11-29",
+    date: "2025-11-29",
     label: "Day 5",
-    weekday: "週五",
+    weekday: "週六",
     weather: "晴朗",
     temp: "10°C - 17°C",
     activities: [
@@ -182,16 +182,16 @@ const itineraryData = [
     ]
   },
   {
-    date: "2024-11-30",
+    date: "2025-11-30",
     label: "Day 6",
-    weekday: "週六",
+    weekday: "週日",
     weather: "晴朗",
     temp: "9°C - 15°C",
     activities: [
       { time: "07:00", title: "早餐：Doutor Coffee", type: "food", icon: "coffee", note: "快速解決早餐", location: "Doutor Coffee Nagoya", transport: "步行", description: "簡單快速的咖啡早餐，確保準時前往機場。", 
         image: "/d6-coffee.jpg" 
       },
-      { time: "09:50", title: "搭乘 CI151 返家", type: "flight", icon: "home", note: "09:50 NGO → 12:40 TPE", location: "Chubu Centrair International Airport", description: "帶著滿滿的回憶與戰利品，平安返家。", 
+      { time: "09:50", title: "搭乘 CI0151 返家", type: "flight", icon: "home", note: "09:50 NGO → 12:15 TPE", location: "Chubu Centrair International Airport", description: "帶著滿滿的回憶與戰利品，平安返家。", 
         image: "/d6-airport.jpg" 
       }
     ]
@@ -261,7 +261,7 @@ export default function App() {
             </div>
         </div>
         <div className="flex items-center justify-between text-blue-100 text-sm">
-            <span>2024/11/25 - 11/30</span>
+            <span>2025/11/25 - 11/30</span>
             <div className="flex items-center space-x-1">
                {currentItinerary.weather.includes('雨') ? <CloudRain size={14} /> : <Sun size={14} />}
                <span>{currentItinerary.temp}</span>
